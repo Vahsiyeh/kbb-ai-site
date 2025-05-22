@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Kapak Yap</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h1>🎨 AI Kapak Hazırlayıcı</h1>
+
+    <div class="form-area">
+      <label>Platform Seç:</label>
+      <select id="platform">
+        <option value="YouTube">YouTube</option>
+        <option value="Instagram">Instagram</option>
+        <option value="TikTok">TikTok</option>
+      </select>
+
+      <label>Kapak Başlığı:</label>
+      <input type="text" id="title" placeholder="örnek: En iyi anlar #shorts"/>
+
+      <label>Stil:</label>
+      <select id="style">
+        <option value="neon">Neon</option>
+        <option value="minimal">Minimal</option>
+        <option value="fun">Eğlenceli</option>
+        <option value="dark">Karanlık</option>
+      </select>
+
+      <button onclick="generateCover()">📷 Kapak Oluştur</button>
+    </div>
+
+    <div id="preview-area" class="hidden">
+      <h2>Hazır Kapak:</h2>
+      <div id="preview"></div>
+      <button onclick="downloadImage()">⬇️ İndir</button>
+      <button onclick="resetForm()">🔄 Yeniden</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
