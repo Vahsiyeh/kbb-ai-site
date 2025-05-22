@@ -1,47 +1,174 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Kapak Yap</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kapak Fotoğrafı Hazırlayıcı | KBB AI</title>
+<style>
+  body {
+    background: #111;
+    color: #f37021;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0; padding: 0;
+    display: flex; flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  header {
+    padding: 1rem;
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+  }
+  main {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 900px;
+    padding: 20px;
+  }
+  .controls {
+    background: #222;
+    padding: 20px;
+    border-radius: 12px;
+    flex: 1 1 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .controls label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .controls input[type=text],
+  .controls select,
+  .controls input[type=color] {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1rem;
+  }
+  .canvas-container {
+    flex: 1 1 480px;
+    background: #222;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  #canvas {
+    border: 2px solid #f37021;
+    border-radius: 12px;
+    max-width: 100%;
+    height: auto;
+  }
+  button {
+    background: #f37021;
+    border: none;
+    color: #111;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button:hover {
+    background: #d45e00;
+  }
+  footer {
+    margin: 20px 0;
+    font-size: 0.9rem;
+    color: #666;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎨 AI Kapak Hazırlayıcı</h1>
+<header>KBB AI Kapak Fotoğrafı Hazırlayıcı</header>
+<main>
+  <section class="controls">
+    <label for="textInput">Kapak Yazısı</label>
+    <input type="text" id="textInput" placeholder="Buraya yaz..." maxlength="50" />
 
-    <div class="form-area">
-      <label>Platform Seç:</label>
-      <select id="platform">
-        <option value="YouTube">YouTube</option>
-        <option value="Instagram">Instagram</option>
-        <option value="TikTok">TikTok</option>
-      </select>
+    <label for="fontSelect">Font Seç</label>
+    <select id="fontSelect">
+      <option value="Segoe UI">Segoe UI</option>
+      <option value="Arial">Arial</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Impact">Impact</option>
+      <option value="Comic Sans MS">Comic Sans MS</option>
+    </select>
 
-      <label>Kapak Başlığı:</label>
-      <input type="text" id="title" placeholder="örnek: En iyi anlar #shorts"/>
+    <label for="colorPicker">Yazı Rengi</label>
+    <input type="color" id="colorPicker" value="#f37021" />
 
-      <label>Stil:</label>
-      <select id="style">
-        <option value="neon">Neon</option>
-        <option value="minimal">Minimal</option>
-        <option value="fun">Eğlenceli</option>
-        <option value="dark">Karanlık</option>
-      </select>
+    <label for="bgColorPicker">Arka Plan Rengi</label>
+    <input type="color" id="bgColorPicker" value="#111111" />
 
-      <button onclick="generateCover()">📷 Kapak Oluştur</button>
-    </div>
+    <button id="generateBtn">Resim Oluştur ve İndir</button>
+  </section>
 
-    <div id="preview-area" class="hidden">
-      <h2>Hazır Kapak:</h2>
-      <div id="preview"></div>
-      <button onclick="downloadImage()">⬇️ İndir</button>
-      <button onclick="resetForm()">🔄 Yeniden</button>
-    </div>
-  </div>
+  <section class="canvas-container">
+    <canvas id="canvas" width="800" height="450"></canvas>
+  </section>
+</main>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="script.js"></script>
+<footer>© 2025 KBB AI</footer>
+
+<!-- Reklam Kodu -->
+<script type='text/javascript' src='//pl26718096.profitableratecpm.com/b2/f2/49/b2f24965360c7efe4cb152f31a8e9e92.js'></script>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  const textInput = document.getElementById('textInput');
+  const fontSelect = document.getElementById('fontSelect');
+  const colorPicker = document.getElementById('colorPicker');
+  const bgColorPicker = document.getElementById('bgColorPicker');
+  const generateBtn = document.getElementById('generateBtn');
+
+  function drawCanvas() {
+    ctx.fillStyle = bgColorPicker.value;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const fontSize = 60;
+    ctx.fillStyle = colorPicker.value;
+    ctx.font = `${fontSize}px ${fontSelect.value}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    const text = textInput.value.trim() || "KBB AI Kapak Fotoğrafı";
+    const lines = text.split('\n');
+
+    const x = canvas.width / 2;
+    const y = canvas.height / 2;
+
+    for(let i=0; i<lines.length; i++) {
+      ctx.fillText(lines[i], x, y + (i - (lines.length-1)/2) * (fontSize + 10));
+    }
+  }
+
+  drawCanvas();
+
+  textInput.addEventListener('input', drawCanvas);
+  fontSelect.addEventListener('change', drawCanvas);
+  colorPicker.addEventListener('input', drawCanvas);
+  bgColorPicker.addEventListener('input', drawCanvas);
+
+  generateBtn.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'kapak_fotografi.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+</script>
 </body>
 </html>
