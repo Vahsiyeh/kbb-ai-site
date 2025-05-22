@@ -4,90 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Kapak Fotoğrafı Hazırlayıcı | KBB AI</title>
-<style>
-  body {
-    background: #111;
-    color: #f37021;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0; padding: 0;
-    display: flex; flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-  }
-  header {
-    padding: 1rem;
-    font-size: 1.8rem;
-    font-weight: bold;
-    letter-spacing: 1.5px;
-  }
-  main {
-    flex-grow: 1;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    max-width: 900px;
-    padding: 20px;
-  }
-  .controls {
-    background: #222;
-    padding: 20px;
-    border-radius: 12px;
-    flex: 1 1 280px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  .controls label {
-    font-weight: 600;
-    margin-bottom: 6px;
-    display: block;
-  }
-  .controls input[type=text],
-  .controls select,
-  .controls input[type=color] {
-    width: 100%;
-    padding: 8px 10px;
-    border-radius: 8px;
-    border: none;
-    font-size: 1rem;
-  }
-  .canvas-container {
-    flex: 1 1 480px;
-    background: #222;
-    border-radius: 12px;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-  }
-  #canvas {
-    border: 2px solid #f37021;
-    border-radius: 12px;
-    max-width: 100%;
-    height: auto;
-  }
-  button {
-    background: #f37021;
-    border: none;
-    color: #111;
-    font-weight: bold;
-    font-size: 1.1rem;
-    padding: 10px 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  button:hover {
-    background: #d45e00;
-  }
-  footer {
-    margin: 20px 0;
-    font-size: 0.9rem;
-    color: #666;
-  }
-</style>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 <header>KBB AI Kapak Fotoğrafı Hazırlayıcı</header>
@@ -124,51 +41,6 @@
 
 <!-- Reklam Kodu -->
 <script type='text/javascript' src='//pl26718096.profitableratecpm.com/b2/f2/49/b2f24965360c7efe4cb152f31a8e9e92.js'></script>
-
-<script>
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-
-  const textInput = document.getElementById('textInput');
-  const fontSelect = document.getElementById('fontSelect');
-  const colorPicker = document.getElementById('colorPicker');
-  const bgColorPicker = document.getElementById('bgColorPicker');
-  const generateBtn = document.getElementById('generateBtn');
-
-  function drawCanvas() {
-    ctx.fillStyle = bgColorPicker.value;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const fontSize = 60;
-    ctx.fillStyle = colorPicker.value;
-    ctx.font = `${fontSize}px ${fontSelect.value}`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
-    const text = textInput.value.trim() || "KBB AI Kapak Fotoğrafı";
-    const lines = text.split('\n');
-
-    const x = canvas.width / 2;
-    const y = canvas.height / 2;
-
-    for(let i=0; i<lines.length; i++) {
-      ctx.fillText(lines[i], x, y + (i - (lines.length-1)/2) * (fontSize + 10));
-    }
-  }
-
-  drawCanvas();
-
-  textInput.addEventListener('input', drawCanvas);
-  fontSelect.addEventListener('change', drawCanvas);
-  colorPicker.addEventListener('input', drawCanvas);
-  bgColorPicker.addEventListener('input', drawCanvas);
-
-  generateBtn.addEventListener('click', () => {
-    const link = document.createElement('a');
-    link.download = 'kapak_fotografi.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  });
-</script>
+<script src="script.js"></script>
 </body>
 </html>
