@@ -1,34 +1,43 @@
-function generateCover() {
-  const title = document.getElementById("title").value;
-  const style = document.getElementById("style").value;
-  const platform = document.getElementById("platform").value;
-  const preview = document.getElementById("preview");
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
-  // Arka plan stilleri
-  const backgrounds = {
-    neon: "linear-gradient(135deg, #ff00ff, #00ffff)",
-    minimal: "#f1f1f1",
-    fun: "linear-gradient(135deg, #ff6600, #ffff66)",
-    dark: "#222"
-  };
+const textInput = document.getElementById('textInput');
+const fontSelect = document.getElementById('fontSelect');
+const colorPicker = document.getElementById('colorPicker');
+const bgColorPicker = document.getElementById('bgColorPicker');
+const generateBtn = document.getElementById('generateBtn');
 
-  preview.style.background = backgrounds[style];
-  preview.style.color = style === "minimal" ? "#000" : "#fff";
-  preview.innerText = `${platform.toUpperCase()} - ${title}`;
+function drawCanvas() {
+  ctx.fillStyle = bgColorPicker.value;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  document.getElementById("preview-area").classList.remove("hidden");
+  const fontSize = 60;
+  ctx.fillStyle = colorPicker.value;
+  ctx.font = `${fontSize}px ${fontSelect.value}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  const text = textInput.value.trim() || "KBB AI Kapak Fotoğrafı";
+  const lines = text.split('\n');
+
+  const x = canvas.width / 2;
+  const y = canvas.height / 2;
+
+  for(let i=0; i<lines.length; i++) {
+    ctx.fillText(lines[i], x, y + (i - (lines.length-1)/2) * (fontSize + 10));
+  }
 }
 
-function downloadImage() {
-  html2canvas(document.getElementById("preview")).then(canvas => {
-    const link = document.createElement("a");
-    link.download = "kapak-foto.png";
-    link.href = canvas.toDataURL();
-    link.click();
-  });
-}
+drawCanvas();
 
-function resetForm() {
-  document.getElementById("title").value = "";
-  document.getElementById("preview-area").classList.add("hidden");
-}
+textInput.addEventListener('input', drawCanvas);
+fontSelect.addEventListener('change', drawCanvas);
+colorPicker.addEventListener('input', drawCanvas);
+bgColorPicker.addEventListener('input', drawCanvas);
+
+generateBtn.addEventListener('click', () => {
+  const link = document.createElement('a');
+  link.download = 'kapak_fotografi.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
