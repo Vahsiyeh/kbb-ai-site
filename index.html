@@ -3,44 +3,373 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Kapak Fotoğrafı Hazırlayıcı | KBB AI</title>
-<link rel="stylesheet" href="style.css" />
+<title>Korkunç Glitch + Jumpscare + Sesli Okuma</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    background: linear-gradient(135deg, #1a0000 0%, #000000 100%);
+    color: #ff5c00;
+    font-family: 'Orbitron', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  #app {
+    position: relative;
+    width: 90vw;
+    max-width: 650px;
+    min-height: 250px;
+    background: rgba(20, 0, 0, 0.8);
+    border: 3px solid #ff5c00;
+    border-radius: 12px;
+    box-shadow:
+      0 0 30px #ff5c00,
+      inset 0 0 20px #ff5c00;
+    padding: 30px 20px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #messageBox {
+    position: relative;
+    width: 100%;
+    min-height: 130px;
+    background: rgba(30, 0, 0, 0.95);
+    border: 2px solid #ff5c00;
+    border-radius: 10px;
+    padding: 20px 40px 20px 80px;
+    font-size: 2rem;
+    line-height: 1.3;
+    color: #ff5c00;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    box-shadow:
+      0 0 20px #ff5c00;
+    user-select: text;
+    overflow-wrap: break-word;
+    font-weight: 900;
+    text-shadow:
+      0 0 8px #ff5c00,
+      1px 1px 2px black;
+  }
+
+  #messageIcon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    filter: drop-shadow(0 0 2px #ff5c00);
+    font-size: 40px;
+    line-height: 45px;
+  }
+
+  #scareBtn {
+    margin-top: 40px;
+    background: transparent;
+    border: 3px solid #ff5c00;
+    color: #ff5c00;
+    font-weight: 900;
+    font-size: 1.5rem;
+    padding: 14px 48px;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: 
+      background-color 0.3s ease, 
+      box-shadow 0.3s ease,
+      color 0.3s ease;
+    box-shadow:
+      0 0 12px #ff5c00;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+  }
+  #scareBtn:hover {
+    background-color: #ff5c00;
+    color: #220000;
+    box-shadow:
+      0 0 40px #ff5c00;
+  }
+  #scareBtn.glitch-active {
+    animation: glitchBtn 0.5s ease-in-out;
+  }
+  @keyframes glitchBtn {
+    0%   {transform: translate(0,0);}
+    20%  {transform: translate(-2px,2px);}
+    40%  {transform: translate(2px,-2px);}
+    60%  {transform: translate(-1px,1px);}
+    80%  {transform: translate(1px,-1px);}
+    100% {transform: translate(0,0);}
+  }
+
+  #messageBox::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom, 
+      rgba(255, 92, 0, 0.1) 0px,
+      rgba(255, 92, 0, 0.15) 1px,
+      rgba(255, 92, 0, 0.1) 2px
+    );
+    z-index: 1;
+  }
+
+  .glitch {
+    animation: glitchText 0.7s ease-in-out infinite;
+  }
+  @keyframes glitchText {
+    0%, 100% {
+      text-shadow: 
+        1px 1px 1px #330000,
+        2px 2px 3px #ff5c00;
+      color: #ff5c00;
+      transform: translate(0,0);
+    }
+    20% {
+      text-shadow:
+        -1px -1px 2px #ff2200,
+        2px 1px 3px #ff8c00;
+      color: #ff2200;
+      transform: translate(-1px, 1px);
+    }
+    40% {
+      text-shadow:
+        1px -1px 2px #ff2200,
+        -1px 2px 2px #ff8c00;
+      color: #ff8c00;
+      transform: translate(1px, -1px);
+    }
+  }
+
+  #screenGlitch {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 9999;
+  }
+  .glitch-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    mix-blend-mode: screen;
+    opacity: 0.04;
+  }
+  .glitch-layer.red {
+    background-image: linear-gradient(
+      0deg,
+      rgba(255,0,0,0.04) 0%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255,0,0,0.02) 50%,
+      transparent 100%
+    );
+    animation: glitchRed 0.25s infinite;
+  }
+  .glitch-layer.green {
+    background-image: linear-gradient(
+      0deg,
+      rgba(0,255,0,0.02) 0%,
+      transparent 30%,
+      transparent 60%,
+      rgba(0,255,0,0.015) 60%,
+      transparent 100%
+    );
+    animation: glitchGreen 0.3s infinite;
+  }
+  .glitch-layer.blue {
+    background-image: linear-gradient(
+      0deg,
+      rgba(0,0,255,0.015) 0%,
+      transparent 40%,
+      transparent 80%,
+      rgba(0,0,255,0.01) 80%,
+      transparent 100%
+    );
+    animation: glitchBlue 0.3s infinite;
+  }
+  @keyframes glitchRed {
+    0% {background-position: 0 0;}
+    50% {background-position: 6px 12px;}
+    100% {background-position: 0 0;}
+  }
+  @keyframes glitchGreen {
+    0% {background-position: 0 0;}
+    50% {background-position: -3px -9px;}
+    100% {background-position: 0 0;}
+  }
+  @keyframes glitchBlue {
+     0% {background-position: 0 0;}
+     50% {background-position: 2px 6px;}
+     100% {background-position: 0 0;}
+  }
+
+  #screenFlicker {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    background: white;
+    opacity: 0;
+    z-index: 10000;
+  }
+
+  #staticNoise {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none;
+    background: url('https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif') repeat;
+    opacity: 0.07;
+    mix-blend-mode: screen;
+    z-index: 9980;
+  }
+
+  /* Jumpscare styles */
+  #jumpscareOverlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 11000;
+  }
+  #jumpscareOverlay img {
+    max-width: 100vw;
+    max-height: 100vh;
+    filter: drop-shadow(0 0 15px #ff2200);
+  }
+
+</style>
 </head>
 <body>
-<header>KBB AI Kapak Fotoğrafı Hazırlayıcı</header>
-<main>
-  <section class="controls">
-    <label for="textInput">Kapak Yazısı</label>
-    <input type="text" id="textInput" placeholder="Buraya yaz..." maxlength="50" />
+  <div id="app">
+    <div id="messageBox" aria-live="polite" aria-atomic="true" role="alert">
+      <span id="messageIcon">⚠️</span>
+      <span id="messageText"></span>
+    </div>
+    <button id="scareBtn" aria-label="Jumpscare başlat">Başlat</button>
+  </div>
 
-    <label for="fontSelect">Font Seç</label>
-    <select id="fontSelect">
-      <option value="Segoe UI">Segoe UI</option>
-      <option value="Arial">Arial</option>
-      <option value="Georgia">Georgia</option>
-      <option value="Courier New">Courier New</option>
-      <option value="Impact">Impact</option>
-      <option value="Comic Sans MS">Comic Sans MS</option>
-    </select>
+  <div id="screenGlitch" aria-hidden="true">
+    <div class="glitch-layer red"></div>
+    <div class="glitch-layer green"></div>
+    <div class="glitch-layer blue"></div>
+  </div>
 
-    <label for="colorPicker">Yazı Rengi</label>
-    <input type="color" id="colorPicker" value="#f37021" />
+  <div id="screenFlicker"></div>
+  <div id="staticNoise"></div>
 
-    <label for="bgColorPicker">Arka Plan Rengi</label>
-    <input type="color" id="bgColorPicker" value="#111111" />
+  <div id="jumpscareOverlay" aria-hidden="true">
+    <img src="https://i.ibb.co/QXz6PTm/scary-face.png" alt="Jumpscare korkunç yüz" />
+  </div>
 
-    <button id="generateBtn">Resim Oluştur ve İndir</button>
-  </section>
+<script>
+  const message = "Şimdi... korkmaya hazır ol. Bu gece kabusların seni bulacak!";
+  const messageText = document.getElementById("messageText");
+  const messageBox = document.getElementById("messageBox");
+  const scareBtn = document.getElementById("scareBtn");
+  const screenGlitch = document.getElementById("screenGlitch");
+  const screenFlicker = document.getElementById("screenFlicker");
+  const staticNoise = document.getElementById("staticNoise");
+  const jumpscareOverlay = document.getElementById("jumpscareOverlay");
 
-  <section class="canvas-container">
-    <canvas id="canvas" width="800" height="450"></canvas>
-  </section>
-</main>
+  let index = 0;
 
-<footer>© 2025 KBB AI</footer>
+  // Yazı yazma fonksiyonu, hız arttırıldı (20-50 ms arası)
+  function write() {
+    if(index < message.length){
+      messageText.textContent += message[index];
+      index++;
+      setTimeout(write, 20 + Math.random() * 30);
+    } else {
+      messageBox.classList.add("glitch");
+      speakText(message);
+    }
+  }
 
-<!-- Reklam Kodu -->
-<script type='text/javascript' src='//pl26718096.profitableratecpm.com/b2/f2/49/b2f24965360c7efe4cb152f31a8e9e92.js'></script>
-<script src="script.js"></script>
+  // Konuşma fonksiyonu, hız arttırıldı
+  function speakText(text){
+    if(!window.speechSynthesis) return;
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "tr-TR";
+    utterance.rate = 1.2; // Hız 1.2x
+    utterance.pitch = 1.0; // Normal tonda, net
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function glitchEffect() {
+    screenGlitch.style.opacity = 1;
+    staticNoise.style.opacity = 0.08;
+    setTimeout(() => {
+      screenGlitch.style.opacity = 0;
+      staticNoise.style.opacity = 0.07;
+    }, 900);
+  }
+
+  function flickerEffect() {
+    screenFlicker.style.opacity = 0.35;
+    setTimeout(() => {
+      screenFlicker.style.opacity = 0;
+    }, 120);
+  }
+
+  function showJumpscare() {
+    jumpscareOverlay.style.opacity = 1;
+    jumpscareOverlay.style.pointerEvents = "auto";
+
+    // Korkutucu ses efekti
+    const scream = new Audio("https://cdn.freesound.org/previews/316/316847_4939433-lq.mp3");
+    scream.play();
+
+    setTimeout(() => {
+      jumpscareOverlay.style.opacity = 0;
+      jumpscareOverlay.style.pointerEvents = "none";
+    }, 1800);
+  }
+
+  scareBtn.addEventListener("click", () => {
+    if(window.speechSynthesis) window.speechSynthesis.cancel();
+
+    index = 0;
+    messageText.textContent = "";
+    messageBox.classList.remove("glitch");
+    scareBtn.disabled = true;
+    scareBtn.classList.add("glitch-active");
+
+    // Yazı yazma başlat
+    write();
+
+    // Ekran efektlerini birkaç kez tetikle
+    let glitchCount = 0;
+    const glitchInterval = setInterval(() => {
+      glitchEffect();
+      flickerEffect();
+      glitchCount++;
+      if(glitchCount > 7){
+        clearInterval(glitchInterval);
+      }
+    }, 180);
+
+    // Jumpscare 4 saniye sonra
+    setTimeout(() => {
+      showJumpscare();
+      scareBtn.disabled = false;
+      scareBtn.classList.remove("glitch-active");
+    }, 4000);
+  });
+</script>
 </body>
 </html>
