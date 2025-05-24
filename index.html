@@ -1,375 +1,246 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Korkunç Glitch + Jumpscare + Sesli Okuma</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
-
-  body, html {
-    margin: 0; padding: 0; height: 100%;
-    background: linear-gradient(135deg, #1a0000 0%, #000000 100%);
-    color: #ff5c00;
-    font-family: 'Orbitron', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    user-select: none;
-  }
-
-  #app {
-    position: relative;
-    width: 90vw;
-    max-width: 650px;
-    min-height: 250px;
-    background: rgba(20, 0, 0, 0.8);
-    border: 3px solid #ff5c00;
-    border-radius: 12px;
-    box-shadow:
-      0 0 30px #ff5c00,
-      inset 0 0 20px #ff5c00;
-    padding: 30px 20px 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  #messageBox {
-    position: relative;
-    width: 100%;
-    min-height: 130px;
-    background: rgba(30, 0, 0, 0.95);
-    border: 2px solid #ff5c00;
-    border-radius: 10px;
-    padding: 20px 40px 20px 80px;
-    font-size: 2rem;
-    line-height: 1.3;
-    color: #ff5c00;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    box-shadow:
-      0 0 20px #ff5c00;
-    user-select: text;
-    overflow-wrap: break-word;
-    font-weight: 900;
-    text-shadow:
-      0 0 8px #ff5c00,
-      1px 1px 2px black;
-  }
-
-  #messageIcon {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 45px;
-    height: 45px;
-    filter: drop-shadow(0 0 2px #ff5c00);
-    font-size: 40px;
-    line-height: 45px;
-  }
-
-  #scareBtn {
-    margin-top: 40px;
-    background: transparent;
-    border: 3px solid #ff5c00;
-    color: #ff5c00;
-    font-weight: 900;
-    font-size: 1.5rem;
-    padding: 14px 48px;
-    border-radius: 10px;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: 
-      background-color 0.3s ease, 
-      box-shadow 0.3s ease,
-      color 0.3s ease;
-    box-shadow:
-      0 0 12px #ff5c00;
-    user-select: none;
-    position: relative;
-    overflow: hidden;
-  }
-  #scareBtn:hover {
-    background-color: #ff5c00;
-    color: #220000;
-    box-shadow:
-      0 0 40px #ff5c00;
-  }
-  #scareBtn.glitch-active {
-    animation: glitchBtn 0.5s ease-in-out;
-  }
-  @keyframes glitchBtn {
-    0%   {transform: translate(0,0);}
-    20%  {transform: translate(-2px,2px);}
-    40%  {transform: translate(2px,-2px);}
-    60%  {transform: translate(-1px,1px);}
-    80%  {transform: translate(1px,-1px);}
-    100% {transform: translate(0,0);}
-  }
-
-  #messageBox::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none;
-    background: repeating-linear-gradient(
-      to bottom, 
-      rgba(255, 92, 0, 0.1) 0px,
-      rgba(255, 92, 0, 0.15) 1px,
-      rgba(255, 92, 0, 0.1) 2px
-    );
-    z-index: 1;
-  }
-
-  .glitch {
-    animation: glitchText 0.7s ease-in-out infinite;
-  }
-  @keyframes glitchText {
-    0%, 100% {
-      text-shadow: 
-        1px 1px 1px #330000,
-        2px 2px 3px #ff5c00;
-      color: #ff5c00;
-      transform: translate(0,0);
+  <meta charset="UTF-8">
+  <title>!!! GÜVENLİK KRİZİ !!!</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: red;
+      font-family: 'Courier New', Courier, monospace;
+      overflow: hidden;
     }
-    20% {
-      text-shadow:
-        -1px -1px 2px #ff2200,
-        2px 1px 3px #ff8c00;
-      color: #ff2200;
-      transform: translate(-1px, 1px);
+
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      animation: flicker 0.3s infinite alternate;
     }
-    40% {
-      text-shadow:
-        1px -1px 2px #ff2200,
-        -1px 2px 2px #ff8c00;
-      color: #ff8c00;
-      transform: translate(1px, -1px);
+
+    @keyframes flicker {
+      0% { opacity: 0.1; color: darkred; }
+      100% { opacity: 1; color: red; }
     }
-  }
 
-  #screenGlitch {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    pointer-events: none;
-    opacity: 0;
-    z-index: 9999;
-  }
-  .glitch-layer {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    mix-blend-mode: screen;
-    opacity: 0.04;
-  }
-  .glitch-layer.red {
-    background-image: linear-gradient(
-      0deg,
-      rgba(255,0,0,0.04) 0%,
-      transparent 25%,
-      transparent 50%,
-      rgba(255,0,0,0.02) 50%,
-      transparent 100%
-    );
-    animation: glitchRed 0.25s infinite;
-  }
-  .glitch-layer.green {
-    background-image: linear-gradient(
-      0deg,
-      rgba(0,255,0,0.02) 0%,
-      transparent 30%,
-      transparent 60%,
-      rgba(0,255,0,0.015) 60%,
-      transparent 100%
-    );
-    animation: glitchGreen 0.3s infinite;
-  }
-  .glitch-layer.blue {
-    background-image: linear-gradient(
-      0deg,
-      rgba(0,0,255,0.015) 0%,
-      transparent 40%,
-      transparent 80%,
-      rgba(0,0,255,0.01) 80%,
-      transparent 100%
-    );
-    animation: glitchBlue 0.3s infinite;
-  }
-  @keyframes glitchRed {
-    0% {background-position: 0 0;}
-    50% {background-position: 6px 12px;}
-    100% {background-position: 0 0;}
-  }
-  @keyframes glitchGreen {
-    0% {background-position: 0 0;}
-    50% {background-position: -3px -9px;}
-    100% {background-position: 0 0;}
-  }
-  @keyframes glitchBlue {
-     0% {background-position: 0 0;}
-     50% {background-position: 2px 6px;}
-     100% {background-position: 0 0;}
-  }
+    .terminal {
+      padding: 20px;
+      color: lime;
+      font-size: 1em;
+      white-space: pre-wrap;
+    }
 
-  #screenFlicker {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    pointer-events: none;
-    background: white;
-    opacity: 0;
-    z-index: 10000;
-  }
+    .popup {
+      position: absolute;
+      width: 280px;
+      background: #300;
+      color: white;
+      border: 2px solid red;
+      box-shadow: 0 0 10px red;
+      padding: 12px;
+      z-index: 1000;
+      animation: shake 0.3s infinite;
+    }
 
-  #staticNoise {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    pointer-events: none;
-    background: url('https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif') repeat;
-    opacity: 0.07;
-    mix-blend-mode: screen;
-    z-index: 9980;
-  }
+    @keyframes shake {
+      0% { transform: translate(1px, 1px); }
+      25% { transform: translate(-1px, -1px); }
+      50% { transform: translate(1px, -2px); }
+      75% { transform: translate(-1px, 2px); }
+      100% { transform: translate(1px, -1px); }
+    }
 
-  /* Jumpscare styles */
-  #jumpscareOverlay {
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease-in-out;
-    z-index: 11000;
-  }
-  #jumpscareOverlay img {
-    max-width: 100vw;
-    max-height: 100vh;
-    filter: drop-shadow(0 0 15px #ff2200);
-  }
+    #lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      color: red;
+      font-size: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9998;
+      display: none;
+      flex-direction: column;
+    }
 
-</style>
+    #jumpscare {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+    }
+
+    #jumpscare img {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    #percent {
+      font-size: 2em;
+      color: white;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    #mouse {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      mix-blend-mode: difference;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    #glitch {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(255, 0, 0, 0.2) 6px);
+      z-index: 9997;
+      pointer-events: none;
+      display: none;
+    }
+
+    #warning {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 1.2em;
+      color: yellow;
+      background: red;
+      padding: 5px;
+      animation: flicker 0.6s infinite alternate;
+    }
+  </style>
 </head>
-<body>
-  <div id="app">
-    <div id="messageBox" aria-live="polite" aria-atomic="true" role="alert">
-      <span id="messageIcon">⚠️</span>
-      <span id="messageText"></span>
-    </div>
-    <button id="scareBtn" aria-label="Jumpscare başlat">Başlat</button>
-  </div>
+<body oncontextmenu="return false;" onkeydown="return false;" onclick="triggerJumpscare()">
 
-  <div id="screenGlitch" aria-hidden="true">
-    <div class="glitch-layer red"></div>
-    <div class="glitch-layer green"></div>
-    <div class="glitch-layer blue"></div>
-  </div>
+<div id="warning">Uyarı: Yusuf sistemin ele geçirildi. Eren gözlemde.</div>
 
-  <div id="screenFlicker"></div>
-  <div id="staticNoise"></div>
+<h1>!!! YUSUF SİSTEMİN ÇÖKÜYOR !!!</h1>
 
-  <div id="jumpscareOverlay" aria-hidden="true">
-    <img src="https://i.ibb.co/QXz6PTm/scary-face.png" alt="Jumpscare korkunç yüz" />
-  </div>
+<div class="terminal" id="terminal">
+> Kullanıcı: Yusuf tanımlandı  
+> Yanındaki: Eren (Aktif İzleyici)  
+> VIRUS: X-HELL.0x999 INFECTED  
+> Sistem dosyaları şifreleniyor...  
+> Fiziksel veri kaybı tespit edildi...  
+> Geri dönemezsin Yusuf.
+</div>
+
+<div id="percent">Sistem Siliniyor: 0%</div>
+
+<div class="popup" id="popup">
+  Yusuf artık çok geç.<br>
+  Geriye sadece gözlem kaldı.
+</div>
+
+<div id="lock-screen">
+  <div>SİSTEM KİLİTLENDİ - KOD: X99-EREN</div>
+  <div>SENİ GÖZLEMEYE DEVAM EDİYORUZ...</div>
+</div>
+
+<div id="jumpscare">
+  <img src="https://i.imgur.com/5R2ZQXW.png" alt="Jumpscare">
+  <audio id="scream" src="https://www.soundjay.com/human/screaming-woman-01.mp3"></audio>
+</div>
+
+<div id="mouse"></div>
+<div id="glitch"></div>
+
+<!-- MÜZİK BURADA -->
+<audio id="muzik" src="muzik.mp3" autoplay loop></audio>
 
 <script>
-  const message = "Şimdi... korkmaya hazır ol. Bu gece kabusların seni bulacak!";
-  const messageText = document.getElementById("messageText");
-  const messageBox = document.getElementById("messageBox");
-  const scareBtn = document.getElementById("scareBtn");
-  const screenGlitch = document.getElementById("screenGlitch");
-  const screenFlicker = document.getElementById("screenFlicker");
-  const staticNoise = document.getElementById("staticNoise");
-  const jumpscareOverlay = document.getElementById("jumpscareOverlay");
+  document.addEventListener("keydown", function(e) {
+    if (["F12", "Escape", "F5", "Control", "Shift"].includes(e.key)) {
+      e.preventDefault();
+    }
+  });
 
-  let index = 0;
-
-  // Yazı yazma fonksiyonu, hız arttırıldı (20-50 ms arası)
-  function write() {
-    if(index < message.length){
-      messageText.textContent += message[index];
-      index++;
-      setTimeout(write, 20 + Math.random() * 30);
-    } else {
-      messageBox.classList.add("glitch");
-      speakText(message);
+  const terminal = document.getElementById("terminal");
+  const originalText = terminal.textContent;
+  terminal.textContent = "";
+  let i = 0;
+  function typeText() {
+    if (i < originalText.length) {
+      terminal.textContent += originalText.charAt(i);
+      i++;
+      setTimeout(typeText, 25);
     }
   }
+  typeText();
 
-  // Konuşma fonksiyonu, hız arttırıldı
-  function speakText(text){
-    if(!window.speechSynthesis) return;
+  let percent = 0;
+  const percentEl = document.getElementById("percent");
+  const interval = setInterval(() => {
+    percent += Math.floor(Math.random() * 10) + 5;
+    if (percent >= 100) {
+      percent = 100;
+      clearInterval(interval);
+    }
+    percentEl.textContent = `Sistem Siliniyor: ${percent}%`;
+  }, 800);
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "tr-TR";
-    utterance.rate = 1.2; // Hız 1.2x
-    utterance.pitch = 1.0; // Normal tonda, net
-    window.speechSynthesis.speak(utterance);
+  const cursor = document.getElementById("mouse");
+  document.addEventListener("mousemove", e => {
+    cursor.style.left = (e.pageX + Math.random() * 30 - 15) + "px";
+    cursor.style.top = (e.pageY + Math.random() * 30 - 15) + "px";
+  });
+
+  setInterval(() => {
+    const p = document.createElement("div");
+    p.className = "popup";
+    p.style.top = Math.random() * (window.innerHeight - 100) + "px";
+    p.style.left = Math.random() * (window.innerWidth - 300) + "px";
+    p.innerHTML = "Sistemin karanlığa gömülüyor Yusuf...";
+    document.body.appendChild(p);
+  }, 5000);
+
+  setInterval(() => {
+    document.body.style.background = document.body.style.background === "black" ? "#2b0000" : "black";
+  }, 500);
+
+  const glitch = document.getElementById("glitch");
+  setInterval(() => {
+    glitch.style.display = "block";
+    setTimeout(() => glitch.style.display = "none", 150);
+  }, 4000);
+
+  setTimeout(() => {
+    document.getElementById("lock-screen").style.display = "flex";
+  }, 17000);
+
+  setTimeout(() => {
+    triggerJumpscare();
+  }, 23000);
+
+  function triggerJumpscare() {
+    const js = document.getElementById("jumpscare");
+    js.style.display = "flex";
+    document.getElementById("scream").play();
   }
 
-  function glitchEffect() {
-    screenGlitch.style.opacity = 1;
-    staticNoise.style.opacity = 0.08;
-    setTimeout(() => {
-      screenGlitch.style.opacity = 0;
-      staticNoise.style.opacity = 0.07;
-    }, 900);
-  }
-
-  function flickerEffect() {
-    screenFlicker.style.opacity = 0.35;
-    setTimeout(() => {
-      screenFlicker.style.opacity = 0;
-    }, 120);
-  }
-
-  function showJumpscare() {
-    jumpscareOverlay.style.opacity = 1;
-    jumpscareOverlay.style.pointerEvents = "auto";
-
-    // Korkutucu ses efekti
-    const scream = new Audio("https://cdn.freesound.org/previews/316/316847_4939433-lq.mp3");
-    scream.play();
-
-    setTimeout(() => {
-      jumpscareOverlay.style.opacity = 0;
-      jumpscareOverlay.style.pointerEvents = "none";
-    }, 1800);
-  }
-
-  scareBtn.addEventListener("click", () => {
-    if(window.speechSynthesis) window.speechSynthesis.cancel();
-
-    index = 0;
-    messageText.textContent = "";
-    messageBox.classList.remove("glitch");
-    scareBtn.disabled = true;
-    scareBtn.classList.add("glitch-active");
-
-    // Yazı yazma başlat
-    write();
-
-    // Ekran efektlerini birkaç kez tetikle
-    let glitchCount = 0;
-    const glitchInterval = setInterval(() => {
-      glitchEffect();
-      flickerEffect();
-      glitchCount++;
-      if(glitchCount > 7){
-        clearInterval(glitchInterval);
-      }
-    }, 180);
-
-    // Jumpscare 4 saniye sonra
-    setTimeout(() => {
-      showJumpscare();
-      scareBtn.disabled = false;
-      scareBtn.classList.remove("glitch-active");
-    }, 4000);
+  // Fullscreen açmaya çalış
+  document.addEventListener("click", () => {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
   });
 </script>
+
 </body>
 </html>
